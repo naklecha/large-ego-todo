@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="description" content="Todo for people with a large ego." />
+    <title>🙇‍♀️‍💻</title>
+</head>
+
+<body>
+    <div id="myDIV" class="header">
+        <h2>🙇‍♀️+‍💻</h2>
+        <input type="text" id="newtodo" placeholder="+ New Task" autocomplete="off">
+        <br>
+        <span class="add" onclick="newElement(document.getElementById('newtodo').value, false)"
+            class="addBtn">Add</span>
+        <br>
+        <br>
+    </div>
+
+    <ul id="list">
+
+    </ul>
+    <br>
+    <br>
+    <br>
+    <br>
+</body>
+
+<style>
+    body {
+        text-align: center;
+        background-color: black;
+        color: whitesmoke;
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 13px;
+        font-weight: 300;
+        letter-spacing: 1px;
+        -webkit-user-select: none;
+        /* Safari */
+        -ms-user-select: none;
+        /* IE 10 and IE 11 */
+        user-select: none;
+        /* Standard syntax */
+    }
+
+    p,
+    input {
+        background-color: rgb(11, 11, 11);
+        width: 200px;
+        margin: auto;
+        margin-bottom: 15px;
+        padding: 10px;
+        border-radius: 5px;
+        border: 2px solid rgb(38, 38, 38);
+        color: whitesmoke;
+        text-align: center;
+        font-family: 'Courier New', Courier, monospace;
+        letter-spacing: 1px;
+        -webkit-user-select: none;
+        /* Safari */
+        -ms-user-select: none;
+        /* IE 10 and IE 11 */
+        user-select: none;
+        /* Standard syntax */
+    }
+
+    ul {
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column-reverse;
+    }
+
+    span {
+        cursor: pointer;
+    }
+
+    .add {
+        color: rgb(256, 0, 150);
+    }
+
+    textarea:focus,
+    input:focus {
+        outline: none;
+        background-color: rgb(15, 15, 15);
+    }
+
+    p {
+        cursor: pointer;
+    }
+</style>
+
+<script>
+
+    var input = document.getElementById("newtodo");
+    input.addEventListener("keypress", function (event) {
+        console.log(event);
+
+        // If the user presses the "Enter" key on the keyboard
+        if (event.key === "Enter") {
+            // Cancel the default action, if needed
+            event.preventDefault();
+            // Trigger the button element with a click
+            newElement(input.value, false);
+        }
+    });
+
+    function setCookie(name, value, days) {
+        var expires = "";
+        if (days) {
+            var date = new Date();
+            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+            expires = "; expires=" + date.toUTCString();
+        }
+        document.cookie = name + "=" + (value || "") + expires + "; path=/";
+    }
+
+    function getCookie(name) {
+        var nameEQ = name + "=";
+        var ca = document.cookie.split(';');
+        for (var i = 0; i < ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+            if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+        }
+        return null;
+    }
+
+    function eraseCookie(name) {
+        document.cookie = name + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+    }
+
+    function close() {
+        this.style.display = "none";
+        var tasks = getCookie("high-ego-todo").split("^u^");
+        var newTasks = ""
+        for (var j = 0; j < tasks.length; j++) {
+            if (tasks[j] != "null" && tasks[j] != this.innerHTML.replace('<span class="close"> 🙅‍♀️</span>', "")) {
+                newTasks += tasks[j] + "^u^";
+            }
+        }
+
+        setCookie("high-ego-todo", newTasks.substring(0, newTasks.length - 3), 100);
+    }
+
+    // Create a new list item when clicking on the "Add" button
+    function newElement(inputValue, loading) {
+        if (!inputValue) return;
+
+        var li = document.createElement("p");
+        var t = document.createTextNode(inputValue);
+        li.onclick = close;
+        li.appendChild(t);
+        document.getElementById("list").appendChild(li);
+        document.getElementById("newtodo").value = "";
+
+        if (!loading) {
+            setCookie("high-ego-todo", getCookie("high-ego-todo") + "^u^" + inputValue, 100);
+        }
+    }
+
+    if (getCookie("high-ego-todo")) {
+        var tasks = getCookie("high-ego-todo").split("^u^");
+        for (var j = 0; j < tasks.length; j++) {
+            if (tasks[j] != "null" && tasks[j] != "")
+                newElement(tasks[j], true);
+        }
+    }
+</script>
+
+</html>
